@@ -1,8 +1,10 @@
 'use strict';
 
-var map_width = 100; // blocks
-var map_height = 100; // blocks
+var map_width = 30; // blocks
+var map_height = 30; // blocks
 var cell_size = 32; // pixels
+var initial_critter_count = 20;
+var herbivore_probability = 95; // percent
 
 function random(max) {
     return Math.floor(Math.random() * (max + 1));
@@ -49,7 +51,7 @@ Herbivore.prototype.move = function (dx, dy) {
     this.my_rect.move(dx, dy);
 }
 Herbivore.prototype.steer = function (map) {
-    switch(random(3)) {
+    switch (random(3)) {
     case 0: maybeMove(this, -2, 0, map); break;
     case 1: maybeMove(this, 2, 0, map); break;
     case 2: maybeMove(this, 0, -2, map); break;
@@ -61,11 +63,11 @@ function Carnivore(options) {
     this.sprite = options.sprite;
     this.x = options.x;
     this.y = options.y;
-    this.my_rect = new jaws.Rect(options.x, options.y, 10, 10);
+    this.my_rect = new jaws.Rect(options.x, options.y, 15, 15);
 };
 Carnivore.prototype.draw = function () {
     jaws.context.fillStyle = 'red';
-    jaws.context.fillRect(this.my_rect.x, this.my_rect.y, 10, 10);
+    jaws.context.fillRect(this.my_rect.x, this.my_rect.y, 15, 15);
 };
 Carnivore.prototype.rect = function () {
     return this.my_rect;
@@ -74,11 +76,11 @@ Carnivore.prototype.move = function(dx, dy) {
     this.my_rect.move(dx, dy);
 };
 Carnivore.prototype.steer = function (map) {
-    switch(random(3)) {
-    case 0: maybeMove(this, -2, 0, map); break;
-    case 1: maybeMove(this, 2, 0, map); break;
-    case 2: maybeMove(this, 0, -2, map); break;
-    case 3: maybeMove(this, 0, 2, map); break;
+    switch (random(3)) {
+    case 0: maybeMove(this, -4, 0, map); break;
+    case 1: maybeMove(this, 4, 0, map); break;
+    case 2: maybeMove(this, 0, -4, map); break;
+    case 3: maybeMove(this, 0, 4, map); break;
     }
 };
 
@@ -90,9 +92,9 @@ function fillMap(map) {
 				    cell_size, cell_size)};
 	    var tile;
 	    if (row === 0 ||
-		row + 1 === map_width ||
+		row + 1 === map_height ||
 		col === 0 ||
-		col + 1 === map_height) {
+		col + 1 === map_width) {
 		// borders are always mountains
 		tile = new Mountain(options);
 	    } else {
@@ -111,11 +113,10 @@ function fillMap(map) {
 		    // duplicate something nearby
 		    // there always is something nearby,
 		    // because of the mountains on the border.
-		    var neighbors = map.atRect({
-			x: options.rect.x - cell_size,
-			y: options.rect.y - cell_size,
-			right: options.rect.right + cell_size,
-			bottom: options.rect.bottom + cell_size});
+		    var neighbors = map.atRect(new jaws.Rect(
+			options.rect.x - cell_size,
+			options.rect.y - cell_size,
+			cell_size * 3, cell_size * 3));
 		    var neighbor = neighbors[random(neighbors.length - 1)];
 		    tile = neighbor.clone(options);
 		    break;
@@ -161,11 +162,11 @@ function TerrainRPG(jaws) {
         this.player.setImage( this.player.anim_default.next() );
         jaws.preventDefaultKeys(["up", "down", "left", "right", "space"]);
         this.critters = [];
-	for (var i = 0; i < 100; ++i) {
+	for (var i = 0; i < initial_critter_count; ++i) {
 	    var options = {x: random(map_width * cell_size),
 			   y: random(map_height * cell_size)};
 	    var critter;
-	    if (random(10) < 8) {
+	    if (random(100) < herbivore_probability) {
 		critter = new Herbivore(options);
 	    } else {
 		critter = new Carnivore(options);

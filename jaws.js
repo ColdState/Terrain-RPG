@@ -2119,7 +2119,7 @@ jaws.Viewport = function ViewPort(options) {
     if(this.x < 0)      { this.x = 0 }
     if(this.x > max)    { this.x = max }
 
-    var max = this.max_y - this.height
+    max = this.max_y - this.height
     if(this.y < 0)      { this.y = 0 }
     if(this.y > max)    { this.y = max }
   };
