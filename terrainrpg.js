@@ -36,54 +36,6 @@ OneWayObstacle.prototype.toString = function () {
 	'))';
 };
 
-function TerrainTile(options) {
-    this.my_rect = options.rect;
-    this.sprite = options.sprite;
-};
-TerrainTile.prototype.rect = function () {
-    return this.my_rect;
-};
-
-function Mountain(options) {
-    TerrainTile.call(this, options);
-};
-Object.extend(Mountain, TerrainTile);
-Mountain.prototype.draw = function () {
-    jaws.context.fillStyle = 'brown';
-    jaws.context.fillRect(this.my_rect.x, this.my_rect.y,
-			  this.my_rect.width, this.my_rect.height);
-};
-
-function Forest(options) {
-    TerrainTile.call(this, options);
-};
-Object.extend(Forest, TerrainTile);
-Forest.prototype.draw = function () {
-    jaws.context.fillStyle = 'brown';
-    jaws.context.fillRect(this.my_rect.x, this.my_rect.y,
-			  this.my_rect.width, this.my_rect.height);
-};
-
-function Grass(rect) {
-    this.my_rect = rect;
-};
-Object.extend(Grass, TerrainTile);
-Grass.prototype.draw = function () {
-    jaws.context.fillStyle = 'brown';
-    jaws.context.fillRect(this.my_rect.x, this.my_rect.y,
-			  this.my_rect.width, this.my_rect.height);
-};
-
-function Lake(rect) {
-    this.my_rect = rect;
-};
-Object.extend(Lake, TerrainTile);
-Lake.prototype.draw = function () {
-    jaws.context.fillStyle = 'brown';
-    jaws.context.fillRect(this.my_rect.x, this.my_rect.y,
-			  this.my_rect.width, this.my_rect.height);
-};
-
 function TerrainRPG(jaws) {
     var map_width = 700; // blocks
     var map_height = 700; // blocks
@@ -102,19 +54,17 @@ function TerrainRPG(jaws) {
 					  cell_size: [32, 32]});
 	for (var row = 0; row < map_width; ++row) {
 	    for (var col = 0; col < map_height; ++col) {
+		var options = { rect: new jaws.Rect(row * cell_size,
+						    col * cell_size,
+						    cell_size, cell_size)};
+		var tile;
 		switch (random(4)) {
-		case 0:
-		    this.tile_map.push(new Mountain({ rect: new jaws.Rect(row * cell_size,
-								     col * cell_size,
-								     cell_size, cell_size)}));
-		    break;
-		case 1:
-		    break;
-		case 2:
-		    break;
-		case 3:
-		    break;
+		case 0: tile = new Mountain(options); break;
+		case 1: tile = new Forest(options); break;
+		case 2: tile = new Grass(options); break;
+		case 3: tile = new Lake(options); break;
 		}
+		this.tile_map.push(tile);
 	    }
 	}
 	this.tile_map.push(
