@@ -17,6 +17,8 @@ Mountain.prototype.draw = function () {
     jaws.context.fillRect(this.my_rect.x, this.my_rect.y,
 			  this.my_rect.width, this.my_rect.height);
 };
+// In general, mountains are impassable
+Mountain.prototype.impassable = true;
 
 function Forest(options) {
     TerrainTile.call(this, options);
@@ -28,8 +30,8 @@ Forest.prototype.draw = function () {
 			  this.my_rect.width, this.my_rect.height);
 };
 
-function Grass(rect) {
-    this.my_rect = rect;
+function Grass(options) {
+    TerrainTile.call(this, options);
 };
 Object.extend(Grass, TerrainTile);
 Grass.prototype.draw = function () {
@@ -38,8 +40,8 @@ Grass.prototype.draw = function () {
 			  this.my_rect.width, this.my_rect.height);
 };
 
-function Lake(rect) {
-    this.my_rect = rect;
+function Lake(options) {
+    TerrainTile.call(this, options);
 };
 Object.extend(Lake, TerrainTile);
 Lake.prototype.draw = function () {

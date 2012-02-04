@@ -15,6 +15,10 @@ function wrap(value, max) {
     return value;
 }
 
+function Critter(options) {
+    this.sprite = options.sprite;
+    this.rect = options.rect;
+};
 function OneWayObstacle(direction, rect) {
     this.direction = direction;
     this.my_rect = rect;
@@ -34,6 +38,19 @@ OneWayObstacle.prototype.toString = function () {
 	', '+this.my_rect.width+
 	', '+this.my_rect.height+
 	'))';
+};
+
+function maybeMove(player, x, y, map) {
+    player.move(x, y);
+    var possible_obstacles = map.atRect(player.rect());
+    for (var i in possible_obstacles) {
+	if (possible_obstacles[i].impassable &&
+	    possible_obstacles[i].rect().collideRect(player.rect())) {
+	    // take the move back
+	    player.move(-x, -y);
+	    break;
+	}
+    }
 };
 
 function TerrainRPG(jaws) {
@@ -58,11 +75,18 @@ function TerrainRPG(jaws) {
 						    col * cell_size,
 						    cell_size, cell_size)};
 		var tile;
-		switch (random(4)) {
-		case 0: tile = new Mountain(options); break;
-		case 1: tile = new Forest(options); break;
-		case 2: tile = new Grass(options); break;
-		case 3: tile = new Lake(options); break;
+		if (row === 0 ||
+		    row + 1 === map_width ||
+		    col === 0 ||
+		    col + 1 === map_height) {
+		    tile = new Mountain(options);
+		} else {
+		    switch (random(3)) {
+		    case 0: tile = new Mountain(options); break;
+		    case 1: tile = new Forest(options); break;
+		    case 2: tile = new Grass(options); break;
+		    case 3: tile = new Lake(options); break;
+		    }
 		}
 		this.tile_map.push(tile);
 	    }
@@ -73,7 +97,7 @@ function TerrainRPG(jaws) {
 			      )
 	);
 
-        this.player = new jaws.Sprite({x:10, y:10,
+        this.player = new jaws.Sprite({x:250, y:250,
 				       scale: 2, anchor: "center"});
         
         var anim = new jaws.Animation({sprite_sheet: "droid_11x15.png",
@@ -94,36 +118,28 @@ function TerrainRPG(jaws) {
     game.update = function() {
         this.player.setImage( this.player.anim_default.next() )
         if (jaws.pressed("left"))  {
-	    // TODO: check for obstacle
-	    this.player.move(-2,0);
-	    var possible_obstacles = this.tile_map.atRect(this.player.rect());
-	    for (var i in possible_obstacles) {
-		if (possible_obstacles[i].direction === 'left' &&
-		    possible_obstacles[i].rect().collideRect(this.player.rect())) {
-		    this.player.move(2,0);
-		    break;
-		}
-	    }
+	    maybeMove(this.player, -2, 0, this.tile_map);
 	    this.player.setImage(this.player.anim_left.next());
 	}
         if (jaws.pressed("right")) {
-	    this.player.move(2,0);
+	    maybeMove(this.player, 2, 0, this.tile_map);
 	    this.player.setImage(this.player.anim_right.next());
 	}
         if (jaws.pressed("up")) {
-	    this.player.move(0, -2);
+	    maybeMove(this.player, 0, -2, this.tile_map);
 	    this.player.setImage(this.player.anim_up.next());
 	}
         if (jaws.pressed("down")) {
-	    this.player.move(0, 2);
+	    maybeMove(this.player, 0, 2, this.tile_map);
 	    this.player.setImage(this.player.anim_down.next());
 	}
 
-        // this.viewport.centerAround(this.player)
+        this.viewport.centerAround(this.player)
     }
 
     game.draw = function() {
-	jaws.context.fillStyle = 'green';
+	// a visible color that shouldn't show
+	jaws.context.fillStyle = 'magenta'; 
 	jaws.context.fillRect(0, 0, jaws.width, jaws.height);
         this.viewport.drawTileMap( this.tile_map );
         this.viewport.draw( this.player );
