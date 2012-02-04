@@ -7,6 +7,12 @@ function TerrainTile(options) {
 TerrainTile.prototype.rect = function () {
     return this.my_rect;
 };
+TerrainTile.prototype.draw = function () {
+	jaws.context.save();
+	jaws.context.translate(this.my_rect.x, this.my_rect.y);
+	this.sprite.draw();
+	jaws.context.restore();
+};
 
 function Mountain(options) {
     TerrainTile.call(this, options);
@@ -21,24 +27,20 @@ Mountain.prototype.draw = function () {
 Mountain.prototype.impassable = true;
 
 function Forest(options) {
+	options.sprite = new jaws.Sprite({
+		image: 'forest_x32.png',
+		x: 0, y: 0});
     TerrainTile.call(this, options);
 };
 Object.extend(Forest, TerrainTile);
-Forest.prototype.draw = function () {
-    jaws.context.fillStyle = 'DarkGreen';
-    jaws.context.fillRect(this.my_rect.x, this.my_rect.y,
-			  this.my_rect.width, this.my_rect.height);
-};
 
 function Grass(options) {
+	options.sprite = new jaws.Sprite({
+		image: 'grass_x32.png',
+		x: 0, y: 0});
     TerrainTile.call(this, options);
 };
 Object.extend(Grass, TerrainTile);
-Grass.prototype.draw = function () {
-    jaws.context.fillStyle = 'LightGreen';
-    jaws.context.fillRect(this.my_rect.x, this.my_rect.y,
-			  this.my_rect.width, this.my_rect.height);
-};
 
 function Lake(options) {
     TerrainTile.call(this, options);
