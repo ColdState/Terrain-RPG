@@ -1,0 +1,21 @@
+<!DOCTYPE html> 
+<html>
+  <head>
+    <title>Terrain RPG (based on jaws example #12)</title>
+    <script src="extend.js"></script>
+    <script src="jaws.js"></script>
+    <script src="terrainrpg.js"></script>
+  </head>
+  <body>
+    <canvas width=800 height=600></canvas>
+    FPS: <span id="fps"></span>
+    <h3>jaws log</h3>
+    <div id="jaws-log"></div>    
+    <script>
+      jaws.assets.add(['grass.png', 'droid_11x15.png']);
+      var game = TerrainRPG(jaws);
+      jaws.start(game);
+    </script>
+</body>
+</html>
+
