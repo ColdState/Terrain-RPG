@@ -17,27 +17,19 @@ function wrap(value, max) {
 
 function Critter(options) {
     this.sprite = options.sprite;
-    this.rect = options.rect;
+    this.x = options.x;
+    this.y = options.y;
+    this.my_rect = new jaws.Rect(this.x, this.y, 10, 10);
 };
-function OneWayObstacle(direction, rect) {
-    this.direction = direction;
-    this.my_rect = rect;
+Critter.prototype.draw = function () {
+    this.my_rect.draw();
 };
-OneWayObstacle.prototype.rect = function () {
+Critter.prototype.rect = function () {
     return this.my_rect;
 };
-OneWayObstacle.prototype.draw = function () {
-    jaws.context.fillStyle = 'black';
-    jaws.context.fillRect(this.my_rect.x, this.my_rect.y,
-			  this.my_rect.width, this.my_rect.height);
-};
-OneWayObstacle.prototype.toString = function () {
-    return 'OneWayObstacle('+this.direction+
-	', new jaws.Rect('+this.my_rect.x+
-	', '+this.my_rect.y+
-	', '+this.my_rect.width+
-	', '+this.my_rect.height+
-	'))';
+Critter.prototype.move = function(dx, dy) {
+    this.x += dx;
+    this.y += dy;
 };
 
 function maybeMove(player, x, y, map) {
@@ -91,15 +83,9 @@ function TerrainRPG(jaws) {
 		this.tile_map.push(tile);
 	    }
 	}
-	this.tile_map.push(
-	    new OneWayObstacle('left',
-			       new jaws.Rect(100, 100, 100, 100)
-			      )
-	);
 
         this.player = new jaws.Sprite({x:250, y:250,
 				       scale: 2, anchor: "center"});
-        
         var anim = new jaws.Animation({sprite_sheet: "droid_11x15.png",
 				       frame_size: [11,15],
 				       frame_duration: 100});
@@ -111,6 +97,11 @@ function TerrainRPG(jaws) {
 
         this.player.setImage( this.player.anim_default.next() );
         jaws.preventDefaultKeys(["up", "down", "left", "right", "space"]);
+        this.critters = [];
+	for (var i = 0; i < 10; ++i) {
+	    this.critters.push(new Critter({x: random(jaws.width),
+					    y: random(jaws.height)}));
+	}
     }
 
     // update() will get called each game tick with your specified FPS.
@@ -135,6 +126,14 @@ function TerrainRPG(jaws) {
 	}
 
         this.viewport.centerAround(this.player)
+	for (var i in this.critters) {
+	    switch(random(3)) {
+	    case 0: this.critters[i].move(-10, 0); break;
+	    case 1: this.critters[i].move(10, 0); break;
+	    case 2: maybeMove(this.critters[i], 0, -1 * cell_size, this.tile_map); break;
+	    case 3: maybeMove(this.critters[i], 0, cell_size, this.tile_map); break;
+	    }
+	}
     }
 
     game.draw = function() {
@@ -142,6 +141,9 @@ function TerrainRPG(jaws) {
 	jaws.context.fillStyle = 'magenta'; 
 	jaws.context.fillRect(0, 0, jaws.width, jaws.height);
         this.viewport.drawTileMap( this.tile_map );
+	for (var i in this.critters) {
+	    this.viewport.draw( this.critters[i] );
+	}
         this.viewport.draw( this.player );
     }
 
