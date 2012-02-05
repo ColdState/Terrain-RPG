@@ -6,21 +6,6 @@ var cell_size = 32; // pixels
 var initial_critter_count = 20;
 var herbivore_probability = 95; // percent
 
-function random(max) {
-    return Math.floor(Math.random() * (max + 1));
-};
-
-function wrap(value, max) {
-    value %= max;
-    // we want to guarantee the output is within [0..max),
-    // and javascript modulus doesn't quite do it,
-    // so we have to fix up negatives.
-    if (value < 0) {
-	value += max;  
-    }
-    return value;
-}
-
 function maybeMove(player, x, y, map) {
     player.move(x, y);
     var possible_obstacles = map.atRect(player.rect());
@@ -34,61 +19,7 @@ function maybeMove(player, x, y, map) {
     }
 }
 
-function Herbivore(options) {
-    this.sprite = options.sprite;
-    this.x = options.x;
-    this.y = options.y;
-    this.my_rect = new jaws.Rect(options.x, options.y, 32, 32);
-}
-Herbivore.prototype.draw = function () {
-	if(this.sprite) {
-		this.sprite.x = this.my_rect.x
-		this.sprite.y = this.my_rect.y
-		this.sprite.draw()
-	} else {
-		jaws.context.fillStyle = 'blue';
-		jaws.context.fillRect(this.my_rect.x, this.my_rect.y, 10, 10);
-	}
-}
-Herbivore.prototype.rect = function () {
-    return this.my_rect;
-}
-Herbivore.prototype.move = function (dx, dy) {
-    this.my_rect.move(dx, dy);
-}
-Herbivore.prototype.steer = function (map) {
-    switch (random(3)) {
-    case 0: maybeMove(this, -2, 0, map); break;
-    case 1: maybeMove(this, 2, 0, map); break;
-    case 2: maybeMove(this, 0, -2, map); break;
-    case 3: maybeMove(this, 0, 2, map); break;
-    }
-}
 
-function Carnivore(options) {
-    this.sprite = options.sprite;
-    this.x = options.x;
-    this.y = options.y;
-    this.my_rect = new jaws.Rect(options.x, options.y, 15, 15);
-}
-Carnivore.prototype.draw = function () {
-    jaws.context.fillStyle = 'red';
-    jaws.context.fillRect(this.my_rect.x, this.my_rect.y, 15, 15);
-}
-Carnivore.prototype.rect = function () {
-    return this.my_rect;
-}
-Carnivore.prototype.move = function(dx, dy) {
-    this.my_rect.move(dx, dy);
-}
-Carnivore.prototype.steer = function (map) {
-    switch (random(3)) {
-    case 0: maybeMove(this, -4, 0, map); break;
-    case 1: maybeMove(this, 4, 0, map); break;
-    case 2: maybeMove(this, 0, -4, map); break;
-    case 3: maybeMove(this, 0, 4, map); break;
-    }
-}
 
 function fillMap(map) {
     for (var row = 0; row < map_width; ++row) {
