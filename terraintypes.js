@@ -15,14 +15,13 @@ TerrainTile.prototype.draw = function () {
 };
 
 function Mountain(options) {
+	options.sprite = new jaws.Sprite({
+		image: 'images/terrain/mountain_x32.png',
+		x: 0, y: 0});
     TerrainTile.call(this, options);
 };
 Object.extend(Mountain, TerrainTile);
-Mountain.prototype.draw = function () {
-    jaws.context.fillStyle = 'brown';
-    jaws.context.fillRect(this.my_rect.x, this.my_rect.y,
-			  this.my_rect.width, this.my_rect.height);
-};
+
 // In general, mountains are impassable
 Mountain.prototype.impassable = true;
 Mountain.prototype.clone = function (options) {
@@ -52,14 +51,13 @@ Grass.prototype.clone = function (options) {
 };
 
 function Lake(options) {
+	options.sprite = new jaws.Sprite({
+		image: 'images/terrain/lake_x32.png',
+		x: 0, y: 0});
     TerrainTile.call(this, options);
 };
 Object.extend(Lake, TerrainTile);
-Lake.prototype.draw = function () {
-    jaws.context.fillStyle = 'cyan';
-    jaws.context.fillRect(this.my_rect.x, this.my_rect.y,
-			  this.my_rect.width, this.my_rect.height);
-};
+
 Lake.prototype.clone = function (options) {
     // When you clone a lake you actually get a forest
     return new Forest(options);
