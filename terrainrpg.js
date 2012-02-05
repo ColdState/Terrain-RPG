@@ -148,18 +148,8 @@ function TerrainRPG(jaws) {
 					  cell_size: [32, 32]});
 	fillMap(this.tile_map);
 
-        this.player = new jaws.Sprite({x:250, y:250,
-				       scale: 2, anchor: "center"});
-        var anim = new jaws.Animation({sprite_sheet: "images/droid_11x15.png",
-				       frame_size: [11,15],
-				       frame_duration: 100});
-        this.player.anim_default = anim.slice(0,5);
-        this.player.anim_up = anim.slice(6,8);
-        this.player.anim_down = anim.slice(8,10);
-        this.player.anim_left = anim.slice(10,12);
-        this.player.anim_right = anim.slice(12,14);
-
-        this.player.setImage( this.player.anim_default.next() );
+        this.player = new jaws.Sprite({image: "images/cloud_x32.png", x:250, y:250,
+				       anchor: "center"});
         jaws.preventDefaultKeys(["up", "down", "left", "right", "space"]);
         this.critters = [];
 	for (var i = 0; i < initial_critter_count; ++i) {
@@ -175,34 +165,28 @@ function TerrainRPG(jaws) {
 	}
     }
 
-    // update() will get called each game tick with your specified FPS.
-    // Put game logic here.
-    game.update = function() {
-        this.player.setImage( this.player.anim_default.next() )
-        if (jaws.pressed("left"))  {
-	    maybeMove(this.player, -2, 0, this.tile_map);
-	    this.player.setImage(this.player.anim_left.next());
-	}
-        if (jaws.pressed("right")) {
-	    maybeMove(this.player, 2, 0, this.tile_map);
-	    this.player.setImage(this.player.anim_right.next());
-	}
-        if (jaws.pressed("up")) {
-	    maybeMove(this.player, 0, -2, this.tile_map);
-	    this.player.setImage(this.player.anim_up.next());
-	}
-        if (jaws.pressed("down")) {
-	    maybeMove(this.player, 0, 2, this.tile_map);
-	    this.player.setImage(this.player.anim_down.next());
+	// update() will get called each game tick with your specified FPS.
+	// Put game logic here.
+	game.update = function() {
+		if (jaws.pressed("left"))  {
+			maybeMove(this.player, -2, 0, this.tile_map);
+		}
+		if (jaws.pressed("right")) {
+		maybeMove(this.player, 2, 0, this.tile_map);
+		}
+		if (jaws.pressed("up")) {
+			maybeMove(this.player, 0, -2, this.tile_map);
+		}
+		if (jaws.pressed("down")) {
+			maybeMove(this.player, 0, 2, this.tile_map);
+		}
+		this.viewport.centerAround(this.player)
+		for (var i in this.critters) {
+			this.critters[i].steer(this.tile_map);
+		}
 	}
 
-        this.viewport.centerAround(this.player)
-	for (var i in this.critters) {
-	    this.critters[i].steer(this.tile_map);
-	}
-    }
-
-    game.draw = function() {
+	game.draw = function() {
 	// a visible color that shouldn't show
 	jaws.context.fillStyle = 'magenta'; 
 	jaws.context.fillRect(0, 0, jaws.width, jaws.height);
