@@ -15,10 +15,10 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.2 r9819"
-   inkscape:export-filename="/home/koldun/code/games/terrain-rpg/grass_x32.png"
+   inkscape:export-filename="/home/koldun/code/games/terrain-rpg/images/terrain/mountain_x32.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
-   sodipodi:docname="grass_x32.svg">
+   sodipodi:docname="mountain_x32.svg">
   <defs
      id="defs4">
     <linearGradient
@@ -39,7 +39,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="7.919596"
      inkscape:cx="29.757075"
-     inkscape:cy="0.39160979"
+     inkscape:cy="5.4423725"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -70,7 +70,7 @@
      id="layer1"
      transform="translate(0,-1020.3622)">
     <g
-       transform="matrix(1.4677212,0,0,0.59017486,0.19273914,407.496)"
+       transform="matrix(1.4677212,0,0,0.59017486,0.1927391,407.496)"
        id="g4255">
       <g
          id="g4257"
@@ -429,7 +429,7 @@
     </g>
     <g
        id="g4169"
-       transform="matrix(1.4677212,0,0,0.59017486,0.19273914,415.496)">
+       transform="matrix(1.4677212,0,0,0.59017486,0.1927391,415.496)">
       <g
          inkscape:export-ydpi="87.724754"
          inkscape:export-xdpi="87.724754"
@@ -786,7 +786,7 @@
       </g>
     </g>
     <g
-       transform="matrix(1.4677212,0,0,0.59017486,0.19273914,421.496)"
+       transform="matrix(1.4677212,0,0,0.59017486,0.1927391,421.496)"
        id="g4083">
       <g
          id="g4085"
@@ -1144,7 +1144,7 @@
       </g>
     </g>
     <g
-       transform="matrix(1.4677212,0,0,0.59017486,0.19273914,427.496)"
+       transform="matrix(1.4677212,0,0,0.59017486,0.1927391,427.496)"
        id="g3997">
       <g
          id="g3999"
@@ -1503,7 +1503,7 @@
     </g>
     <g
        id="g3953"
-       transform="matrix(1.4677212,0,0,0.59017486,0.19273914,433.496)">
+       transform="matrix(1.4677212,0,0,0.59017486,0.1927391,433.496)">
       <g
          inkscape:export-ydpi="87.724754"
          inkscape:export-xdpi="87.724754"
@@ -1863,6 +1863,9 @@
        style="fill:#cccccc;fill-opacity:1;stroke:#000000;stroke-width:0.80000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 1.6922504,1051.1691 6.9998537,-27.5 1.6851499,4.375 5.314704,-5.8036 5.185077,14.2857 4.277687,-7.2321 6.740599,21.875 z"
        id="path5830"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/koldun/code/games/terrain-rpg/images/terrain/mountain_x32.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
   </g>
 </svg>

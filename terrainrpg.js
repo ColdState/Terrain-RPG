@@ -32,21 +32,27 @@ function maybeMove(player, x, y, map) {
 	    break;
 	}
     }
-};
+}
 
 function Herbivore(options) {
     this.sprite = options.sprite;
     this.x = options.x;
     this.y = options.y;
-    this.my_rect = new jaws.Rect(options.x, options.y, 10, 10);
-};
+    this.my_rect = new jaws.Rect(options.x, options.y, 32, 32);
+}
 Herbivore.prototype.draw = function () {
-    jaws.context.fillStyle = 'blue';
-    jaws.context.fillRect(this.my_rect.x, this.my_rect.y, 10, 10);
-};
+	if(this.sprite) {
+		this.sprite.x = this.my_rect.x
+		this.sprite.y = this.my_rect.y
+		this.sprite.draw()
+	} else {
+		jaws.context.fillStyle = 'blue';
+		jaws.context.fillRect(this.my_rect.x, this.my_rect.y, 10, 10);
+	}
+}
 Herbivore.prototype.rect = function () {
     return this.my_rect;
-};
+}
 Herbivore.prototype.move = function (dx, dy) {
     this.my_rect.move(dx, dy);
 }
@@ -57,24 +63,24 @@ Herbivore.prototype.steer = function (map) {
     case 2: maybeMove(this, 0, -2, map); break;
     case 3: maybeMove(this, 0, 2, map); break;
     }
-};
+}
 
 function Carnivore(options) {
     this.sprite = options.sprite;
     this.x = options.x;
     this.y = options.y;
     this.my_rect = new jaws.Rect(options.x, options.y, 15, 15);
-};
+}
 Carnivore.prototype.draw = function () {
     jaws.context.fillStyle = 'red';
     jaws.context.fillRect(this.my_rect.x, this.my_rect.y, 15, 15);
-};
+}
 Carnivore.prototype.rect = function () {
     return this.my_rect;
-};
+}
 Carnivore.prototype.move = function(dx, dy) {
     this.my_rect.move(dx, dy);
-};
+}
 Carnivore.prototype.steer = function (map) {
     switch (random(3)) {
     case 0: maybeMove(this, -4, 0, map); break;
@@ -82,7 +88,7 @@ Carnivore.prototype.steer = function (map) {
     case 2: maybeMove(this, 0, -4, map); break;
     case 3: maybeMove(this, 0, 4, map); break;
     }
-};
+}
 
 function fillMap(map) {
     for (var row = 0; row < map_width; ++row) {
@@ -129,41 +135,49 @@ function fillMap(map) {
 
 function TerrainRPG(jaws) {
 
-    var game = {};    
-    
-    // Called once when a game state is activated.
-    // Use it for one-time setup code.
-    game.setup = function() {
-        this.viewport = new jaws.Viewport({max_x: map_width * cell_size,
-					   max_y: map_height * cell_size});
+	var game = {};    
 
-        // A tilemap, each cell is 32x32 pixels.
+	// Called once when a game state is activated.
+	// Use it for one-time setup code.
+	game.setup = function() {
+		this.viewport = new jaws.Viewport({max_x: map_width * cell_size,
+					 max_y: map_height * cell_size});
 
-	// We generate a first map,
-	// then we generate a second one from the first one.
-        var first_map = new jaws.TileMap({size: [map_width, map_height],
+		// A tilemap, each cell is 32x32 pixels.
+
+		// We generate a first map,
+		// then we generate a second one from the first one.
+		var first_map = new jaws.TileMap({size: [map_width, map_height],
 					  cell_size: [32, 32]});
-	fillMap(first_map);
-        this.tile_map = new jaws.TileMap({size: [map_width, map_height],
+		fillMap(first_map);
+		this.tile_map = new jaws.TileMap({size: [map_width, map_height],
 					  cell_size: [32, 32]});
-	fillMap(this.tile_map);
+		fillMap(this.tile_map);
 
-        this.player = new jaws.Sprite({image: "images/cloud_x32.png", x:250, y:250,
+		this.player = new jaws.Sprite({image: "images/cloud_x32.png", x:250, y:250,
 				       anchor: "center"});
-        jaws.preventDefaultKeys(["up", "down", "left", "right", "space"]);
-        this.critters = [];
-	for (var i = 0; i < initial_critter_count; ++i) {
-	    var options = {x: random(map_width * cell_size),
-			   y: random(map_height * cell_size)};
-	    var critter;
-	    if (random(100) < herbivore_probability) {
-		critter = new Herbivore(options);
-	    } else {
-		critter = new Carnivore(options);
-	    }
-	    this.critters.push(critter);
+		jaws.preventDefaultKeys(["up", "down", "left", "right", "space"]);
+		this.critters = [];
+		for (var i = 0; i < initial_critter_count; ++i) {
+			var critter_x = random(map_width * cell_size)
+			var critter_y = random(map_height * cell_size)
+			var options = {
+				x: critter_x,
+				y: critter_y
+			};
+			var critter;
+			var sprite;
+			if (random(100) < herbivore_probability) {
+				sprite = new jaws.Sprite({image: "images/creatures/nuper_x32.png", x:critter_x, y:critter_y,
+				       anchor: "center"});
+				options.sprite = sprite
+				critter = new Herbivore(options);
+			} else {
+				critter = new Carnivore(options);
+			}
+			this.critters.push(critter);
+		}
 	}
-    }
 
 	// update() will get called each game tick with your specified FPS.
 	// Put game logic here.
@@ -187,16 +201,16 @@ function TerrainRPG(jaws) {
 	}
 
 	game.draw = function() {
-	// a visible color that shouldn't show
-	jaws.context.fillStyle = 'magenta'; 
-	jaws.context.fillRect(0, 0, jaws.width, jaws.height);
-        this.viewport.drawTileMap( this.tile_map );
-	for (var i in this.critters) {
-	    this.viewport.draw( this.critters[i] );
+		// a visible color that shouldn't show
+		jaws.context.fillStyle = 'magenta'; 
+		jaws.context.fillRect(0, 0, jaws.width, jaws.height);
+		this.viewport.drawTileMap( this.tile_map );
+		for (var i in this.critters) {
+			this.viewport.draw( this.critters[i] );
+		}
+		this.viewport.draw( this.player );
 	}
-        this.viewport.draw( this.player );
-    }
 
-    return game;
+	return game;
 };
 
