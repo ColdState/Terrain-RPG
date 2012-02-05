@@ -31,7 +31,7 @@ Mountain.prototype.clone = function (options) {
 
 function Forest(options) {
 	options.sprite = new jaws.Sprite({
-		image: 'forest_x32.png',
+		image: 'images/terrain/forest_x32.png',
 		x: 0, y: 0});
     TerrainTile.call(this, options);
 };
@@ -42,7 +42,7 @@ Forest.prototype.clone = function (options) {
 
 function Grass(options) {
     options.sprite = new jaws.Sprite({
-	image: 'grass_x32.png',
+	image: 'images/terrain/grass_x32.png',
 	x: 0, y: 0});
     TerrainTile.call(this, options);
 };

@@ -150,7 +150,7 @@ function TerrainRPG(jaws) {
 
         this.player = new jaws.Sprite({x:250, y:250,
 				       scale: 2, anchor: "center"});
-        var anim = new jaws.Animation({sprite_sheet: "droid_11x15.png",
+        var anim = new jaws.Animation({sprite_sheet: "images/droid_11x15.png",
 				       frame_size: [11,15],
 				       frame_duration: 100});
         this.player.anim_default = anim.slice(0,5);
