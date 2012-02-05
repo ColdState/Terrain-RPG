@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="32"
+   height="32"
+   id="svg4371"
+   version="1.1"
+   inkscape:version="0.48.2 r9819"
+   inkscape:export-filename="/home/koldun/code/games/terrain-rpg/forest_x32.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90"
+   sodipodi:docname="New document 7">
+  <defs
+     id="defs4373" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#022713"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:zoom="15.839192"
+     inkscape:cx="12.262142"
+     inkscape:cy="17.126703"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1337"
+     inkscape:window-height="758"
+     inkscape:window-x="369"
+     inkscape:window-y="175"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata4376">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-1020.3622)">
+    <rect
+       style="opacity:0.93000034;fill:#552200;fill-opacity:1;stroke:#000000;stroke-width:0.29802126;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.96803655;stroke-dasharray:none"
+       id="rect5285"
+       width="2.3620913"
+       height="10.487983"
+       x="8.0562582"
+       y="1041.2654" />
+    <path
+       style="fill:#086800;fill-opacity:1;stroke:#000000;stroke-width:0.37901363;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 8.9052216,1021.2793 c -0.077005,3.7466 -2.8035528,7.1893 -6.9082851,11.5633 l 4.1771026,-1.7425 c -0.2492612,2.9833 -2.4168942,5.9664 -5.22137811,8.9498 l 4.73940481,-2.1385 c -0.6657287,3.0009 -2.0471156,6.3224 -5.06072051,10.3752 l 6.66729841,-2.3759 2.8115123,-0.2377 6.747626,3.0098 c -1.902784,-2.689 -3.653682,-5.7372 -4.498417,-10.9298 l 5.221377,1.5048 c -2.742578,-2.14 -4.123141,-3.5365 -4.659076,-8.2368 l 4.498418,1.267 c -4.834658,-3.2488 -7.083598,-7.1426 -8.5148624,-11.0087 z"
+       id="path5283"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cccccccccccccc" />
+    <rect
+       y="1041.4548"
+       x="22.008989"
+       height="10.487983"
+       width="2.3620913"
+       id="rect5291"
+       style="opacity:0.93000034;fill:#552200;fill-opacity:1;stroke:#000000;stroke-width:0.29802126;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.96803655;stroke-dasharray:none" />
+    <path
+       sodipodi:nodetypes="cccccccccccccc"
+       inkscape:connector-curvature="0"
+       id="path5293"
+       d="m 22.857954,1021.4687 c -0.077,3.7466 -2.803553,7.1893 -6.908285,11.5633 l 4.177102,-1.7425 c -0.249261,2.9833 -2.416894,5.9664 -5.221378,8.9498 l 4.739405,-2.1385 c -0.665729,3.0009 -2.047116,6.3224 -5.060721,10.3752 l 6.667299,-2.3759 2.811512,-0.2377 6.747626,3.0098 c -1.902784,-2.689 -3.653682,-5.7372 -4.498417,-10.9298 l 5.221377,1.5048 c -2.742578,-2.14 -4.123141,-3.5365 -4.659076,-8.2368 l 4.498418,1.267 c -4.834658,-3.2488 -7.083598,-7.1426 -8.514862,-11.0087 z"
+       style="fill:#086800;fill-opacity:1;stroke:#000000;stroke-width:0.37901363;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+  </g>
+</svg>
