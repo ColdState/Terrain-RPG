@@ -22,7 +22,7 @@ Creature.prototype.move = function (dx, dy) {
 Creature.prototype.rect = function () {
 	return this.my_rect;
 }
-Creature.prototype.steer = function (map) {
+Creature.prototype.update = function (map) {
 	switch (random(3)) {
 		case 0: maybeMove(this, -this.pixels_per_move, 0, map); break;
 		case 1: maybeMove(this, this.pixels_per_move, 0, map); break;
