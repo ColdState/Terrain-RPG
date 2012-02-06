@@ -33,7 +33,6 @@ Creature.prototype.update = function (map) {
 
 function Herbivore(options) {
 	options.color = 'blue'
-	options.pixels_per_move = 2
 	options.square_size = 10
 	
 	Creature.call(this, options)  // Use parent's constructor
@@ -43,7 +42,6 @@ Object.extend(Herbivore, Creature)
 
 function Carnivore(options) {
 	options.color = 'red'
-	options.pixels_per_move = 4
 	options.square_size = 15
 	Creature.call(this, options)  // Use parent's constructor
 	this.my_rect = new jaws.Rect(options.x, options.y, 32, 32);

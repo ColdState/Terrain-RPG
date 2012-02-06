@@ -5,6 +5,7 @@ var map_height = 30; // blocks
 var cell_size = 32; // pixels
 var initial_critter_count = 20;
 var herbivore_probability = 95; // percent
+var ticks_per_turn = 45  // Controls how many update() ticks per turn
 
 function maybeMove(player, x, y, map) {
 	player.move(x, y);
@@ -53,12 +54,10 @@ function fillMap(map) {
 		for (var col = 0; col < map_height; ++col) {
 			var options = {
 				rect: new jaws.Rect(row * cell_size, col * cell_size,
-				cell_size, cell_size)
+						cell_size, cell_size)
 			};
-			if (row === 0 ||
-					row + 1 === map_height ||
-					col === 0 ||
-					col + 1 === map_width) {
+			if (row === 0 || row + 1 === map_height ||
+					col === 0 || col + 1 === map_width) {
 				// borders are always mountains
 				tile = new Mountain(options);
 			} else {
@@ -71,7 +70,9 @@ function fillMap(map) {
 
 function TerrainRPG(jaws) {
 
-	var game = {};    
+	var game = {
+		cycle_ticks: 0  // Controls number of 'update' ticks per game turn
+	};
 
 	// Called once when a game state is activated.
 	// Use it for one-time setup code.
@@ -84,10 +85,10 @@ function TerrainRPG(jaws) {
 		// We generate a first map,
 		// then we generate a second one from the first one.
 		var first_map = new jaws.TileMap({size: [map_width, map_height],
-					  cell_size: [32, 32]});
+					  cell_size: [cell_size, cell_size]});
 		fillMap(first_map);
 		this.tile_map = new jaws.TileMap({size: [map_width, map_height],
-					  cell_size: [32, 32]});
+					  cell_size: [cell_size, cell_size]});
 		fillMap(this.tile_map);
 
 		this.player = new jaws.Sprite({image: "images/cloud_x32.png", x:250, y:250,
@@ -105,8 +106,9 @@ function TerrainRPG(jaws) {
 			};
 			if (random(100) < herbivore_probability) {
 				sprite = new jaws.Sprite({image: "images/creatures/nuper_x32.png", x:critter_x, y:critter_y,
-				       anchor: "center"});
+				       anchor: "bottom"});
 				options.sprite = sprite
+				options.pixels_per_move = cell_size
 				critter = new Herbivore(options);
 			} else {
 				critter = new Carnivore(options);
@@ -130,11 +132,22 @@ function TerrainRPG(jaws) {
 		if (jaws.pressed("down")) {
 			maybeMove(this.player, 0, 2, this.tile_map);
 		}
-		var that = this
 		this.viewport.centerAround(this.player)
-		this.critters.forEach(function(each) { each.update(that.tile_map) })
+		
+		this.cycle_ticks++
+		if(this.cycle_ticks >= ticks_per_turn) {
+			this.cycle_ticks = 0
+			this.updateTurn()  // Move critters
+		}
 	}
 
+	// Gets called every 'ticks_per_turn' number of update()s
+	// Implemented to keep monster movement from getting too jittery
+	game.updateTurn = function() {
+		var that = this
+		this.critters.forEach(function(each) { each.update(that.tile_map) })
+	}
+	
 	game.draw = function() {
 		// a visible color that shouldn't show
 		jaws.context.fillStyle = 'magenta'; 
