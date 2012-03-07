@@ -71,7 +71,8 @@ function fillMap(map) {
 function TerrainRPG(jaws) {
 
 	var game = {
-		cycle_ticks: 0  // Controls number of 'update' ticks per game turn
+		cycle_ticks: 0,  // Controls number of 'update' ticks per game turn
+		turns: 0
 	};
 	
 	// Called once when a game state is activated.
@@ -142,6 +143,7 @@ function TerrainRPG(jaws) {
 		this.cycle_ticks++
 		if(this.cycle_ticks >= ticks_per_turn) {
 			this.cycle_ticks = 0
+			this.turns++
 			this.updateTurn()  // Move critters
 		}
 	}
@@ -150,7 +152,9 @@ function TerrainRPG(jaws) {
 	// Implemented to keep monster movement from getting too jittery
 	game.updateTurn = function() {
 		var that = this
-		this.scheduler.step()
+		while(this.scheduler.clock < this.turns) {
+			this.scheduler.step()
+		}
 		this.critters.forEach(function(each) { each.update(that.tile_map) })
 	}
 	

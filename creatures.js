@@ -4,8 +4,8 @@ function CreatureMind(body) {
 		// Change the body's heading, as a side effect
 		this.body.heading = random(3)
 		
-		// Request rescheduling immediatly
-		var command = scheduler.run()
+		// Request rescheduling next turn
+		var command = scheduler.sleep(random(5))
 		return command
 	}
 }
