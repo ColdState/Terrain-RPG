@@ -1,10 +1,29 @@
+function CreatureMind(body) {
+	this.body = body
+	this.step = function(scheduler) {
+		// Change the body's heading, as a side effect
+		this.body.heading = random(3)
+		
+		// Request rescheduling immediatly
+		var command = scheduler.run()
+		return command
+	}
+}
+
 function Creature(options) {
+	this.id = options.id
 	this.sprite = options.sprite;
 	this.x = options.x;
 	this.y = options.y;
+	this.name = 'Creature ' + this.id
 	this.color = options.color
 	this.pixels_per_move = options.pixels_per_move
 	this.square_size = options.square_size
+	
+	this.mind = new CreatureMind(this)
+	
+	// Initial heading at random
+	this.heading = random(3)
 }
 Creature.prototype.draw = function () {
 	if(this.sprite) {
@@ -23,7 +42,7 @@ Creature.prototype.rect = function () {
 	return this.my_rect;
 }
 Creature.prototype.update = function (map) {
-	switch (random(3)) {
+	switch (this.heading) {
 		case 0: maybeMove(this, -this.pixels_per_move, 0, map); break;
 		case 1: maybeMove(this, this.pixels_per_move, 0, map); break;
 		case 2: maybeMove(this, 0, -this.pixels_per_move, map); break;

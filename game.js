@@ -4,7 +4,7 @@ var map_width = 30; // blocks
 var map_height = 30; // blocks
 var cell_size = 32; // pixels
 var initial_critter_count = 20;
-var herbivore_probability = 95; // percent
+var herbivore_probability = 50; // percent
 var ticks_per_turn = 45  // Controls how many update() ticks per turn
 
 function maybeMove(player, x, y, map) {
@@ -73,7 +73,7 @@ function TerrainRPG(jaws) {
 	var game = {
 		cycle_ticks: 0  // Controls number of 'update' ticks per game turn
 	};
-
+	
 	// Called once when a game state is activated.
 	// Use it for one-time setup code.
 	game.setup = function() {
@@ -82,6 +82,8 @@ function TerrainRPG(jaws) {
 
 		// A tilemap, each cell is 32x32 pixels.
 
+		this.scheduler = new Scheduler()
+		
 		// We generate a first map,
 		// then we generate a second one from the first one.
 		var first_map = new jaws.TileMap({size: [map_width, map_height],
@@ -102,7 +104,8 @@ function TerrainRPG(jaws) {
 			var critter_y = random(map_height * cell_size)
 			var options = {
 				x: critter_x,
-				y: critter_y
+				y: critter_y,
+				id: i
 			};
 			if (random(100) < herbivore_probability) {
 				sprite = new jaws.Sprite({image: "images/creatures/nuper_x32.png", x:critter_x, y:critter_y,
@@ -111,14 +114,16 @@ function TerrainRPG(jaws) {
 				options.pixels_per_move = cell_size
 				critter = new Herbivore(options);
 			} else {
+				options.pixels_per_move = cell_size
 				critter = new Carnivore(options);
 			}
+			
+			this.scheduler.spawn(critter.name, critter.mind)
 			this.critters.push(critter);
 		}
 	}
 
 	// update() will get called each game tick with your specified FPS.
-	// Put game logic here.
 	game.update = function() {
 		if (jaws.pressed("left"))  {
 			maybeMove(this.player, -2, 0, this.tile_map);
@@ -145,6 +150,7 @@ function TerrainRPG(jaws) {
 	// Implemented to keep monster movement from getting too jittery
 	game.updateTurn = function() {
 		var that = this
+		this.scheduler.step()
 		this.critters.forEach(function(each) { each.update(that.tile_map) })
 	}
 	
