@@ -1,12 +1,5 @@
 'use strict';
 
-var map_width = 30; // blocks
-var map_height = 30; // blocks
-var cell_size = 32; // pixels
-var initial_critter_count = 20;
-var herbivore_probability = 50; // percent
-var ticks_per_turn = 45  // Controls how many update() ticks per turn
-
 function maybeMove(player, x, y, map) {
 	player.move(x, y);
 	var possible_obstacles = map.atRect(player.rect());
@@ -126,6 +119,7 @@ function TerrainRPG(jaws) {
 
 	// update() will get called each game tick with your specified FPS.
 	game.update = function() {
+	    var that = this
 		if (jaws.pressed("left"))  {
 			maybeMove(this.player, -2, 0, this.tile_map);
 		}
@@ -144,8 +138,11 @@ function TerrainRPG(jaws) {
 		if(this.cycle_ticks >= ticks_per_turn) {
 			this.cycle_ticks = 0
 			this.turns++
-			this.updateTurn()  // Move critters
+			this.updateTurn()  
 		}
+	    // Move critters
+
+		this.critters.forEach(function(each) { each.update(that.tile_map) })
 	}
 
 	// Gets called every 'ticks_per_turn' number of update()s
@@ -155,7 +152,6 @@ function TerrainRPG(jaws) {
 		while(this.scheduler.clock < this.turns) {
 			this.scheduler.step()
 		}
-		this.critters.forEach(function(each) { each.update(that.tile_map) })
 	}
 	
 	game.draw = function() {

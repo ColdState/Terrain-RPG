@@ -1,13 +1,13 @@
 function CreatureMind(body) {
 	this.body = body
-	this.step = function(scheduler) {
-		// Change the body's heading, as a side effect
-		this.body.heading = random(3)
+}
+CreatureMind.prototype.step = function (scheduler, message_ignored) {
+    // Change the body's heading, as a side effect
+    this.body.heading = random(3)
 		
-		// Request rescheduling next turn
-		var command = scheduler.sleep(random(5))
-		return command
-	}
+    // Request rescheduling next turn
+    var command = scheduler.sleep(random(5))
+    return command
 }
 
 function Creature(options) {
@@ -42,11 +42,12 @@ Creature.prototype.rect = function () {
 	return this.my_rect;
 }
 Creature.prototype.update = function (map) {
+    var d = this.pixels_per_move / ticks_per_turn
 	switch (this.heading) {
-		case 0: maybeMove(this, -this.pixels_per_move, 0, map); break;
-		case 1: maybeMove(this, this.pixels_per_move, 0, map); break;
-		case 2: maybeMove(this, 0, -this.pixels_per_move, map); break;
-		case 3: maybeMove(this, 0, this.pixels_per_move, map); break;
+		case 0: maybeMove(this, -d, 0, map); break;
+		case 1: maybeMove(this, d, 0, map); break;
+		case 2: maybeMove(this, 0, -d, map); break;
+		case 3: maybeMove(this, 0, d, map); break;
 	}
 }
 
