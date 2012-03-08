@@ -1,5 +1,10 @@
 'use strict';
 
+var behavior_tree = new BehaviorTree()
+var creatures_table = new Creatures(jaws, behavior_tree)
+var Carnivore = creatures_table.Carnivore
+var Herbivore = creatures_table.Herbivore
+
 function maybeMove(player, x, y, map) {
 	player.move(x, y);
 	var possible_obstacles = map.atRect(player.rect());

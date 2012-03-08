@@ -1,5 +1,5 @@
 // My attempt at implementing behavior trees,
-// as described by Damian Isla, Chirs Hecker,
+// as described by Damian Isla, Chris Hecker,
 // Alex Champandard, and Bjoern Knafla.
 //
 // I'm incompetent in javascript, so this probably
