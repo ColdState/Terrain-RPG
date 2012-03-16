@@ -12,10 +12,17 @@
 
 function BehaviorTree() {
 
-	var Done = function () {}
-	Done.prototype.done = function () { return true }
-	Done.prototype.pushLeft = function () { return this }
-	Done.prototype.pushRight = function () { return this }
+	var Done = function() {
+	}
+	Done.prototype.done = function() {
+		return true
+	}
+	Done.prototype.pushLeft = function() {
+		return this
+	}
+	Done.prototype.pushRight = function() {
+		return this
+	}
 	this.Done = Done; // stick it into the namespace
 
 	var failure = new Done()
@@ -24,50 +31,70 @@ function BehaviorTree() {
 	var success = new Done()
 	this.success = success; // stick it into the namespace
 
-	var Running = function () {}
-	Running.prototype.done = function () { return false }
-	Running.prototype.pushLeft = function () {
+	var Running = function() {
+	}
+	Running.prototype.done = function() {
+		return false
+	}
+	Running.prototype.pushLeft = function() {
 		return new Left(this)
 	}
-	Running.prototype.pushRight = function () {
+	Running.prototype.pushRight = function() {
 		return new Right(this)
 	}
 	this.Running = Running
 
 	var sequential_and = {}
-	sequential_and.shortCutsOn = function (result) {
+	sequential_and.shortCutsOn = function(result) {
 		return result === failure
 	}
-	sequential_and.id = function () { return success }
-        sequential_and.killer = failure
-	sequential_and.reactive = function () { return false }
+	sequential_and.id = function() {
+		return success
+	}
+	sequential_and.killer = failure
+	sequential_and.reactive = function() {
+		return false
+	}
 	this.sequential_and = sequential_and
-	
+
 	var sequential_or = {}
-	sequential_or.shortCutsOn = function (result) {
+	sequential_or.shortCutsOn = function(result) {
 		return result === success
 	}
-	sequential_or.id = function () { return failure }
-        sequential_or.killer = success
-	sequential_or.reactive = function () { return false }
+	sequential_or.id = function() {
+		return failure
+	}
+	sequential_or.killer = success
+	sequential_or.reactive = function() {
+		return false
+	}
 	this.sequential_or = sequential_or
 
+	// Reactive means you're going to perform the test every time
 	var reactive_and = {}
-	reactive_and.shortCutsOn = function (result) {
+	reactive_and.shortCutsOn = function(result) {
 		return result === failure
 	}
-	reactive_and.id = function () { return success }
-        reactive_and.killer = failure
-	reactive_and.reactive = function () { return true }
+	reactive_and.id = function() {
+		return success
+	}
+	reactive_and.killer = failure
+	reactive_and.reactive = function() {
+		return true
+	}
 	this.reactive_and = reactive_and
 
 	var reactive_or = {}
-	reactive_or.shortCutsOn = function (result) {
+	reactive_or.shortCutsOn = function(result) {
 		return result === success
 	}
-	reactive_or.id = function () { return failure }
-        reactive_or.killer = success
-	reactive_or.reactive = function () { return true }
+	reactive_or.id = function() {
+		return failure
+	}
+	reactive_or.killer = success
+	reactive_or.reactive = function() {
+		return true
+	}
 	this.reactive_or = reactive_or
 
 	function Branch(left, op, right) {
@@ -75,7 +102,7 @@ function BehaviorTree() {
 		this.op = op
 		this.right = right
 	}
-	Branch.prototype.myEval = function (left_lambda, right_lambda) {
+	Branch.prototype.myEval = function(left_lambda, right_lambda) {
 		var x = left_lambda()
 		if (this.op.shortCutsOn(x)) {
 			return x
@@ -86,17 +113,20 @@ function BehaviorTree() {
 		}
 		throw new Error("This should not happen")
 	}
-	Branch.prototype.start = function () {
-	    var that = this
-	    return this.myEval(function () { return that.left.start() },
-			       function () { return that.right.start() })
+	Branch.prototype.start = function() {
+		var that = this
+		return this.myEval(function() {
+			return that.left.start()
+		}, function() {
+			return that.right.start()
+		})
 	}
 	this.Branch = Branch
 
 	function Leaf(x) {
 		this.x = x
 	}
-	Leaf.prototype.start = function () {
+	Leaf.prototype.start = function() {
 		return this.x
 	}
 	this.Leaf = Leaf
@@ -104,20 +134,21 @@ function BehaviorTree() {
 	function Delay(delayed) {
 		this.delayed = delayed
 	}
-	Delay.prototype.start = function () {
+	Delay.prototype.start = function() {
 		return new Resume()
 	}
-	Delay.prototype.resume = function () {
+	Delay.prototype.resume = function() {
 		return this.delayed.start()
 	}
 	this.Delay = Delay
 
-	function Resume() {}
+	function Resume() {
+	}
 	Object.extend(Resume, Running)
-	Resume.prototype.step = function (delay) {
+	Resume.prototype.step = function(delay) {
 		return delay.resume()
 	}
-	Resume.prototype.toString = function () {
+	Resume.prototype.toString = function() {
 		return ''
 	}
 	this.Resume = Resume
@@ -126,13 +157,15 @@ function BehaviorTree() {
 		this.path = path
 	}
 	Object.extend(Left, Running)
-	Left.prototype.step = function (tree) {
-	    var that = this
-	    return tree.myEval(
-		function () { return that.path.step(tree.left); },
-		function () { return tree.right.start(); })
+	Left.prototype.step = function(tree) {
+		var that = this
+		return tree.myEval(function() {
+			return that.path.step(tree.left);
+		}, function() {
+			return tree.right.start();
+		})
 	}
-	Left.prototype.toString = function () {
+	Left.prototype.toString = function() {
 		return 'l' + this.path
 	}
 	this.Left = Left
@@ -141,38 +174,39 @@ function BehaviorTree() {
 		this.path = path
 	}
 	Object.extend(Right, Running)
-	Right.prototype.step = function (tree) {
+	Right.prototype.step = function(tree) {
 		var that = this
 		if (tree.op.reactive()) {
-			return tree.myEval(
-			    function () { return tree.left.start(); },
-			    function () { return that.path.step(tree.right); })
+			return tree.myEval(function() {
+				return tree.left.start();
+			}, function() {
+				return that.path.step(tree.right);
+			})
 		} else {
 			return this.path.step(tree.right).pushRight()
 		}
 	}
-	Right.prototype.toString = function () {
+	Right.prototype.toString = function() {
 		return 'r' + this.path
 	}
 	this.Right = Right
 
-        function Prioritized(items) {
-	    return items.reduce( function (l, r) {
-		return new Branch(l, reactive_or, r)
-	    })
-        }
-        this.Prioritized = Prioritized
-
-        function Sequence(items) {
-	    return items.reduce( function (l, r) {
-		return new Branch(l, sequential_and, r) 
-	    })
+	function Prioritized(items) {
+		return items.reduce(function(l, r) {
+			return new Branch(l, reactive_or, r)
+		})
 	}
-    this.Sequence = Sequence
+	this.Prioritized = Prioritized
 
-    function Rule(test, action) {
-	return new Branch(test, reactive_and, action)
-    }
-    this.Rule = Rule
+	function Sequence(items) {
+		return items.reduce(function(l, r) {
+			return new Branch(l, sequential_and, r)
+		})
+	}
+	this.Sequence = Sequence
+
+	function Rule(test, action) {
+		return new Branch(test, reactive_and, action)
+	}
+	this.Rule = Rule
 }
-
